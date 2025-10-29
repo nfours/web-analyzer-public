@@ -66,9 +66,35 @@ func (a *htmlAnalyzer) Analyze(targetURL string) (*AnalysisResult, error) {
 }
 
 func detectHTMLVersion(doc *html.Node) string {
-	if doc.Type == html.DoctypeNode && strings.Contains(strings.ToLower(doc.Data), "html") {
-		return "HTML5"
+	for n := doc; n != nil; n = n.NextSibling {
+		if n.Type == html.DoctypeNode {
+			doctype := strings.ToLower(n.Data)
+
+			
+			if doctype == "html" {
+				return "HTML5"
+			}
+
+			
+			if strings.Contains(doctype, "html 4.01") {
+				return "HTML 4.01"
+			}
+			if strings.Contains(doctype, "xhtml 1.0") {
+				return "XHTML 1.0"
+			}
+			if strings.Contains(doctype, "xhtml 1.1") {
+				return "XHTML 1.1"
+			}
+		}
+
+		
+		if n.FirstChild != nil {
+			if version := detectHTMLVersion(n.FirstChild); version != "Unknown" {
+				return version
+			}
+		}
 	}
+
 	return "Unknown"
 }
 
