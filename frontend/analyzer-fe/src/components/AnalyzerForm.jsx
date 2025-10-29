@@ -1,20 +1,12 @@
 import { useState } from "react";
 
-const dummyData = {
-    htmlVersion: "HTML5",
-    "pageTitle": "Lucytech",
-    internalLinks: 18,
-    externalLinks: 9,
-    loginFormExists: true
-} 
-
-export default function AnalyzerForm({ onResult }) {
+export default function AnalyzerForm({ onSubmitClick }) {
 
   const [url, setUrl] = useState("");
 
   const analyze =  (e) => {
     e.preventDefault();
-    onResult(dummyData);
+    onSubmitClick(url);
   };
 
   return (
